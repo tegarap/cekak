@@ -57,7 +57,7 @@ func (h *UrlHandler) CreateShortUrlHandler(c *fiber.Ctx) error {
 	url, err := h.model.Add(site)
 	if err = c.BodyParser(&input); err != nil {
 		return c.Status(fiber.StatusInternalServerError).
-			JSON(util.ResponseError("Fail to Create Shortlink", nil))
+			JSON(util.ResponseError("Fail to Create Short Url", nil))
 	}
 
 	sUrl := struct {
@@ -67,7 +67,7 @@ func (h *UrlHandler) CreateShortUrlHandler(c *fiber.Ctx) error {
 	}
 
 	return c.Status(fiber.StatusCreated).
-		JSON(util.ResponseSuccess("Success Create Shortlink", sUrl))
+		JSON(util.ResponseSuccess("Success Create Short Url", sUrl))
 }
 
 func (h *UrlHandler) GetSiteHandler(c *fiber.Ctx) error {
@@ -76,7 +76,8 @@ func (h *UrlHandler) GetSiteHandler(c *fiber.Ctx) error {
 	url, err := h.model.GetSite(keyword)
 
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(util.ResponseFail("Fail to Get Site Url", nil))
+		return c.Status(fiber.StatusBadRequest).
+			JSON(util.ResponseFail("Fail to Get Site Url", nil))
 	}
 
 	lUrl := struct {
@@ -85,5 +86,18 @@ func (h *UrlHandler) GetSiteHandler(c *fiber.Ctx) error {
 		SiteUrl: url.LongUrl,
 	}
 
-	return c.Status(fiber.StatusOK).JSON(util.ResponseSuccess("Success Get Site Url", lUrl))
+	return c.Status(fiber.StatusOK).
+		JSON(util.ResponseSuccess("Success Get Site Url", lUrl))
+}
+
+func (h *UrlHandler) DeleteHandler(c *fiber.Ctx) error {
+	keyword := c.Params("keyword")
+
+	if err := h.model.Delete(keyword); err != nil {
+		return c.Status(fiber.StatusInternalServerError).
+			JSON(util.ResponseError("Fail to Delete Short Url", nil))
+	}
+
+	return c.Status(fiber.StatusOK).
+		JSON(util.ResponseSuccess("Success Delete Short Url", nil))
 }

@@ -15,6 +15,7 @@ type (
 		Add(url models.Site) (models.Site, error)
 		IsExist(shortUrl string) (interface{}, error)
 		GetSite(shortUrl string) (models.Site, error)
+		Delete(shortUrl string) error
 	}
 )
 
@@ -44,4 +45,10 @@ func (m *SiteModel) GetSite(shortUrl string) (models.Site, error) {
 	var url models.Site
 	err := m.db.Where("short_url = ?", shortUrl).First(&url).Error
 	return url, err
+}
+
+func (m *SiteModel) Delete(shortUrl string) error {
+	var url models.Site
+	err := m.db.Where("short_url = ?", shortUrl).Delete(&url).Error
+	return err
 }
