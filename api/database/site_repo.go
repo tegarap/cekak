@@ -2,6 +2,7 @@ package database
 
 import (
 	"github.com/tegarap/cekak/api/models"
+
 	"gorm.io/gorm"
 )
 

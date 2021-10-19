@@ -1,8 +1,9 @@
 package routes
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"github.com/tegarap/cekak/api/handlers"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func Routes(app *fiber.App, h *handlers.UrlHandler) {

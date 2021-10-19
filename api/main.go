@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/gofiber/fiber/v2"
 	"github.com/tegarap/cekak/api/config"
 	"github.com/tegarap/cekak/api/database"
 	"github.com/tegarap/cekak/api/handlers"
 	"github.com/tegarap/cekak/api/models"
 	"github.com/tegarap/cekak/api/routes"
+	"log"
+
+	"github.com/gofiber/fiber/v2"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"log"
 )
 
 func main()  {

@@ -1,11 +1,12 @@
 package handlers
 
 import (
-	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
 	"github.com/tegarap/cekak/api/database"
 	"github.com/tegarap/cekak/api/models"
 	"github.com/tegarap/cekak/api/util"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/fiber/v2"
 )
 
 type UrlHandler struct {
