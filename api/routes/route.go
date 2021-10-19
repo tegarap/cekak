@@ -7,8 +7,8 @@ import (
 )
 
 func Routes(app *fiber.App, h *handlers.UrlHandler) {
-	app.Post("/create", h.CreateShortUrlHandler)
-	app.Get("/all", h.GetAllSiteHandler)
+	app.Post("", h.CreateShortUrlHandler)
+	app.Get("", h.GetAllSiteHandler)
 	app.Get("/:keyword", h.GetSiteHandler)
 	app.Delete("/:keyword", h.DeleteHandler)
 }

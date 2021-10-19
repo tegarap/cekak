@@ -35,12 +35,6 @@ func (h *UrlHandler) CreateShortUrlHandler(c *fiber.Ctx) error {
 			JSON(util.ResponseError("Server Error", nil))
 	}
 
-	exist, _ := h.model.IsExist(input.ShortUrl)
-	if exist != nil {
-		return c.Status(fiber.StatusBadRequest).
-			JSON(util.ResponseFail("Please Use Another Keyword", nil))
-	}
-
 	//input.LongUrl = strings.Replace(strings.ToLower(input.LongUrl), "https://", "http://", 1)
 
 	validate := validator.New()
@@ -55,7 +49,7 @@ func (h *UrlHandler) CreateShortUrlHandler(c *fiber.Ctx) error {
 	}
 
 	url, err := h.model.Add(site)
-	if err = c.BodyParser(&input); err != nil {
+	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(util.ResponseError("Fail to Create Short Url", nil))
 	}
