@@ -1,6 +1,6 @@
 package models
 
-type Url struct {
+type Site struct {
 	LongUrl  string `json:"long_url"`
 	ShortUrl string `json:"short_url"`
 }
