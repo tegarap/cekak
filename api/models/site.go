@@ -1,6 +1,6 @@
 package models
 
 type Site struct {
-	LongUrl  string `json:"long_url"`
-	ShortUrl string `json:"short_url"`
+	LongUrl  string `json:"long_url" validate:"required,url"`
+	ShortUrl string `json:"short_url" validate:"required"`
 }
