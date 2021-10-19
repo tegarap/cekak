@@ -16,7 +16,7 @@ type (
 )
 
 func NewUrlDbModel(db *gorm.DB) *SiteModel {
-	db.AutoMigrate(&SiteModel{})
+	//db.AutoMigrate(&SiteModel{})
 	return &SiteModel{db: db}
 }
 
@@ -27,6 +27,6 @@ func (m *SiteModel) GetAll() ([]models.Site, error) {
 }
 
 func (m *SiteModel) Add(url models.Site) (models.Site, error) {
-	err := m.db.Save(&url).Error
+	err := m.db.Create(&url).Error
 	return url, err
 }
