@@ -1,12 +1,11 @@
 package handlers
 
 import (
+	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/fiber/v2"
 	"github.com/tegarap/cekak/api/database"
 	"github.com/tegarap/cekak/api/models"
 	"github.com/tegarap/cekak/api/util"
-
-	"github.com/go-playground/validator/v10"
-	"github.com/gofiber/fiber/v2"
 )
 
 type UrlHandler struct {
@@ -29,12 +28,17 @@ func (h *UrlHandler) GetAllSiteHandler(c *fiber.Ctx) error {
 
 func (h *UrlHandler) CreateShortUrlHandler(c *fiber.Ctx) error {
 	var err error
-
 	input := new(models.Site)
 	err = c.BodyParser(&input)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(util.ResponseError("Server Error", nil))
+	}
+
+	exist, _ := h.model.IsExist(input.ShortUrl)
+	if exist != nil {
+		return c.Status(fiber.StatusBadRequest).
+			JSON(util.ResponseFail("Please Use Another Keyword", nil))
 	}
 
 	//input.LongUrl = strings.Replace(strings.ToLower(input.LongUrl), "https://", "http://", 1)
@@ -50,28 +54,36 @@ func (h *UrlHandler) CreateShortUrlHandler(c *fiber.Ctx) error {
 		ShortUrl: input.ShortUrl,
 	}
 
-	Url, err := h.model.Add(site)
+	url, err := h.model.Add(site)
 	if err = c.BodyParser(&input); err != nil {
 		return c.Status(fiber.StatusInternalServerError).
 			JSON(util.ResponseError("Fail to Create Shortlink", nil))
 	}
 
-	sLink := struct {
-		Site string `json:"site"`
+	sUrl := struct {
+		ShortUrl string `json:"short_url"`
 	}{
-		Site: Url.ShortUrl,
+		ShortUrl: url.ShortUrl,
 	}
 
 	return c.Status(fiber.StatusCreated).
-		JSON(util.ResponseSuccess("Success Create Shortlink", sLink))
+		JSON(util.ResponseSuccess("Success Create Shortlink", sUrl))
 }
 
 func (h *UrlHandler) GetSiteHandler(c *fiber.Ctx) error {
-	//	keyword := c.Params("keyword")
-	//
-	//	var site models.Site
-	//
-	//
-	//
-	return c.Status(fiber.StatusOK).JSON(util.ResponseSuccess("Forward to Link", nil))
+	keyword := c.Params("keyword")
+
+	url, err := h.model.GetSite(keyword)
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(util.ResponseFail("Fail to Get Site Url", nil))
+	}
+
+	lUrl := struct {
+		SiteUrl string `json:"site_url"`
+	}{
+		SiteUrl: url.LongUrl,
+	}
+
+	return c.Status(fiber.StatusOK).JSON(util.ResponseSuccess("Success Get Site Url", lUrl))
 }

@@ -13,6 +13,8 @@ type (
 	SiteModelImpl interface {
 		GetAll() ([]models.Site, error)
 		Add(url models.Site) (models.Site, error)
+		IsExist(shortUrl string) (interface{}, error)
+		GetSite(shortUrl string) (models.Site, error)
 	}
 )
 
@@ -29,5 +31,17 @@ func (m *SiteModel) GetAll() ([]models.Site, error) {
 
 func (m *SiteModel) Add(url models.Site) (models.Site, error) {
 	err := m.db.Create(&url).Error
+	return url, err
+}
+
+func (m *SiteModel) IsExist(shortUrl string) (interface{}, error) {
+	var url models.Site
+	err := m.db.Where("short_url = ?", shortUrl).First(&url).Error
+	return url, err
+}
+
+func (m *SiteModel) GetSite(shortUrl string) (models.Site, error) {
+	var url models.Site
+	err := m.db.Where("short_url = ?", shortUrl).First(&url).Error
 	return url, err
 }
