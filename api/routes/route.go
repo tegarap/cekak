@@ -11,4 +11,5 @@ func Routes(app *fiber.App, h *handlers.UrlHandler) {
 	app.Get("", h.GetAllSiteHandler)
 	app.Get("/:keyword", h.GetSiteHandler)
 	app.Delete("/:keyword", h.DeleteHandler)
+	app.Get("/redirect/:keyword", h.RedirectHandler)
 }
