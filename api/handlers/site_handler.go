@@ -95,3 +95,24 @@ func (h *UrlHandler) DeleteHandler(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).
 		JSON(util.ResponseSuccess("Success Delete Short Url", nil))
 }
+
+func (h *UrlHandler) RedirectHandler(c *fiber.Ctx) error {
+	keyword := c.Params("keyword")
+
+	url, err := h.model.GetSite(keyword)
+
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).
+			JSON(util.ResponseFail("Fail to Get Site Url", nil))
+	}
+
+	//lUrl := struct {
+	//	SiteUrl string `json:"site_url"`
+	//}{
+	//	SiteUrl: url.LongUrl,
+	//}
+
+	return c.Redirect(url.LongUrl, fiber.StatusMovedPermanently)
+	//return c.Status(fiber.StatusMovedPermanently).
+	//	JSON(util.ResponseSuccess("Success Get Site Url", lUrl))
+}
